@@ -1,36 +1,39 @@
-import asyncio
-import logging
-import os
+# bot/main.py
 
+import asyncio
+import os
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
 
 from bot.router import router
+from utils.logger import setup_logger
+
+# 1. Загрузка и проверка токена
+load_dotenv()
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+if not BOT_TOKEN:
+    raise RuntimeError("Отсутствует переменная окружения BOT_TOKEN в файле .env")
+
+# 2. Настройка логгера
+logger = setup_logger("zoo_totem_bot")
 
 async def main():
-    # Загрузка переменных окружения из .env
-    load_dotenv()
-    token = os.getenv("BOT_TOKEN")
-    if not token:
-        raise RuntimeError("BOT_TOKEN не задан в .env")
-
-    # Настройка логирования
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(message)s",
-        handlers=[logging.FileHandler("bot.log", encoding="utf-8"), logging.StreamHandler()]
-    )
-    logger = logging.getLogger(__name__)
-    logger.info("Запускаем бот…")
-
-    # Инициализация бота и диспетчера
-    bot = Bot(token=token)
+    bot = Bot(token=BOT_TOKEN)
     dp = Dispatcher(storage=MemoryStorage())
     dp.include_router(router)
 
-    # Запуск polling
-    await dp.start_polling(bot)
+    try:
+        logger.info("🚀 Запуск ZooTotemBot…")
+        # Запуск поллинга
+        await dp.start_polling(bot)
+    except Exception:
+        logger.exception("❌ Неожиданная ошибка в работе бота")
+    finally:
+        # Закрываем сессию HTTP-клиента
+        await bot.session.close()
+        logger.info("🛑 Бот остановлен")
 
 if __name__ == "__main__":
+    # Запускаем главный корутин через asyncio
     asyncio.run(main())
