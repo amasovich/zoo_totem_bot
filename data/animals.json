@@ -1,0 +1,62 @@
+{
+  "дикобраз": {
+    "name": "Дикобраз",
+    "description": "Ты немного колючий, но заботливый. Ценишь тишину и личное пространство.",
+    "image": "media/images/dikobraz.jpg",
+    "guardian_link": "https://zoo.ru/opeka/dikobraz"
+  },
+  "тигр": {
+    "name": "Тигр",
+    "description": "Сильный, уверенный, сам по себе лидер. Уважает одиночество.",
+    "image": "media/images/tigr.jpg",
+    "guardian_link": "https://zoo.ru/opeka/tigr"
+  },
+  "пингвин": {
+    "name": "Пингвин",
+    "description": "Любишь холод и компанию. Преданный и всегда держишься близких.",
+    "image": "media/images/pingvin.jpg",
+    "guardian_link": "https://zoo.ru/opeka/pingvin"
+  },
+  "тюлень": {
+    "name": "Тюлень",
+    "description": "Мягкий и нежный. Любишь понежиться, но всегда готов к действию.",
+    "image": "media/images/tulen.jpg",
+    "guardian_link": "https://zoo.ru/opeka/tulen"
+  },
+  "снежный барс": {
+    "name": "Снежный барс",
+    "description": "Редкий и сильный. Ты ценишь свободу и уединение.",
+    "image": "media/images/bars.jpg",
+    "guardian_link": "https://zoo.ru/opeka/bars"
+  },
+  "медведь": {
+    "name": "Медведь",
+    "description": "Ты — воплощение силы и добродушия. Любишь поспать и покопаться в мёде.",
+    "image": "media/images/medved.jpg",
+    "guardian_link": "https://zoo.ru/opeka/medved"
+  },
+  "попугай": {
+    "name": "Попугай",
+    "description": "Обожаешь общение и веселье. Ты яркий и запоминающийся.",
+    "image": "media/images/popugai.jpg",
+    "guardian_link": "https://zoo.ru/opeka/popugai"
+  },
+  "фламинго": {
+    "name": "Фламинго",
+    "description": "Ты утончённый, ценишь красоту и гармонию. Любишь быть в центре внимания.",
+    "image": "media/images/flamingo.jpg",
+    "guardian_link": "https://zoo.ru/opeka/flamingo"
+  },
+  "сурикат": {
+    "name": "Сурикат",
+    "description": "Ты всегда на чеку, заботишься о семье и любишь командную работу.",
+    "image": "media/images/surikat.jpg",
+    "guardian_link": "https://zoo.ru/opeka/surikat"
+  },
+  "совa": {
+    "name": "Сова",
+    "description": "Мудрый и ночной. Ты ценишь знания и тишину.",
+    "image": "media/images/sova.jpg",
+    "guardian_link": "https://zoo.ru/opeka/sova"
+  }
+}
