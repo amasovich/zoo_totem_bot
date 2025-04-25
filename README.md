@@ -34,48 +34,71 @@
 
 ## 🚀 Установка и запуск
 
-1. **Клонировать репозиторий**
+1. **Подготовьте сервер** (Ubuntu/Debian/CentOS и др.):  
 
-   ```bash
-    git clone https://github.com/<ваш-username>/zoo_totem_bot.git
+    Убедитесь, что установлены Python 3.10+, git и virtualenv:
+
+    ```bash
+    sudo apt update
+    sudo apt install -y python3 python3-venv python3-pip git
+    ```
+
+2. **Клонируйте репозиторий и перейдите в папку проекта:**
+
+    ```bash
+    cd /opt
+    sudo git clone https://github.com/<ваш-username>/zoo_totem_bot.git
+    sudo chown -R $USER:$USER zoo_totem_bot
     cd zoo_totem_bot
     ```
 
-2. **Создать и активировать виртуальное окружение**
+3. **Создайте и активируйте виртуальное окружение, установите зависимости:**
 
     ```bash
-    python -m venv venv
-    # Linux/macOS
+    python3 -m venv venv
     source venv/bin/activate
-    # Windows
-    venv\Scripts\activate
+    pip install --no-cache-dir -r requirements.txt
     ```
 
-3. **Установить зависимости**
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. **Создать файл .env**
+4. **Настройте переменные окружения:**
 
     ```bash
     cp .env.example .env
+    # Откройте .env и вставьте ваш BOT_TOKEN:
+    # BOT_TOKEN=123456789:ABCDefGhIJKLMnoPQRsT
     ```
 
-5. **Вставьте ваш токен от BotFather в строку:**
+5. **Запустите бота как systemd-службу:**
+
+    Создайте файл /etc/systemd/system/zoo_totem_bot.service:
 
     ```bash
-    BOT_TOKEN=<ваш_токен>
+    [Unit]
+    Description=ZooTotemBot — Telegram quiz bot
+    After=network.target
+
+    [Service]
+    Type=simple
+    User=<ваш-пользователь>
+    WorkingDirectory=/opt/zoo_totem_bot
+    ExecStart=/opt/zoo_totem_bot/venv/bin/python -m bot.main
+    Restart=on-failure
+
+    [Install]
+    WantedBy=multi-user.target
     ```
 
-6. **Запустить бота**
+    Активируйте и запустите службу:
 
     ```bash
-    python -m bot.main
+    sudo systemctl daemon-reload
+    sudo systemctl enable zoo_totem_bot
+    sudo systemctl start zoo_totem_bot
+    sudo journalctl -u zoo_totem_bot -f
     ```
 
-После запуска отправьте боту команду /start в Telegram.
+После этого бот будет автоматически стартовать на сервере и перезапускаться при сбоях. 
+Для проверки отправьте ему /start в Telegram
 
 ## 🧪 Тестирование
 В проекте есть автоматические тесты для ключевых хендлеров (папка tests/).
@@ -126,7 +149,7 @@
     │   └── generated/         # Сгенерированные ботом картинки
     ├── tests/
     │   └── test_bot_handlers.py  # Автотесты хендлеров
-    ├── .env.example           # Образец файла с токеном
+    ├── .env                   # Образец файла с токеном
     ├── requirements.txt       # Зависимости
     ├── pytest.ini             # Настройка pytest (pythonpath)
     ├── README.md              # Этот файл
