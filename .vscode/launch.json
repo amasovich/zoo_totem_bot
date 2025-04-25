@@ -1,15 +1,16 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "Run ZooTotemBot",
-        "type": "python",
-        "request": "launch",
-        "program": "${workspaceFolder}/bot/main.py",
-        "console": "integratedTerminal",
-        "envFile": "${workspaceFolder}/.env",
-        "cwd": "${workspaceFolder}"
-      }
-    ]
-  }
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Zoo Totem Bot",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "bot.main",                // <-- запускаем как модуль
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/.env",
+      "cwd": "${workspaceFolder}",         // <-- корень проекта
+      "justMyCode": true
+    }
+  ]
+}
   

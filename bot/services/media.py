@@ -57,7 +57,7 @@ async def generate_image(
     draw.text((x, y), caption, font=font_regular, fill="white")
 
     # 6) Вставляем логотип в правый нижний угол
-    logo_path = "media/logo/MZoo-logo-circle-black.png"
+    logo_path = "media/logo/MZoo-logo-circle-mono-black.png"
     if os.path.exists(logo_path):
         try:
             logo = Image.open(logo_path).convert("RGBA")

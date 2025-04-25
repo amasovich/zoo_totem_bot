@@ -1,7 +1,7 @@
 # bot/handlers/sharing.py
 
 import logging
-from aiogram import Router, F
+from aiogram import Router, types, F
 
 from bot.services.sharing import share_result
 
@@ -11,6 +11,8 @@ logger = logging.getLogger("zoo_totem_bot.sharing")
 @router.callback_query(F.data.startswith("share_"))
 async def share_callback(callback: types.CallbackQuery):
     totem_key = callback.data.replace("share_", "")
-    logger.info(f"Пользователь {callback.from_user.id} делится результатом: {totem_key}")
-    await share_result(callback.message, totem_key)
+    user = callback.from_user
+    user_name = user.first_name or user.username or str(user.id)
+    logger.info(f"Пользователь {user.id} делится результатом: {totem_key}")
+    await share_result(callback.message, totem_key, user_name)
     await callback.answer()
