@@ -12,12 +12,13 @@ async def generate_image(
     user_name: str
 ) -> str:
     """
-    Открывает исходную картинку animal_name из image_path,
-    рисует текст (animal_name и user_name), вставляет логотип
-    и сохраняет результат в media/generated/<user>_<animal>.png.
-    Возвращает путь к сохранённому файлу.
+    Открывает исходную картинку, рисует:
+      – заголовок animal_name шрифтом Bold,
+      – подпись user_name шрифтом Regular,
+      – вставляет логотип.
+    Сохраняет результат в media/generated/<user>_<animal>.png и возвращает путь.
     """
-    # 1) Загружаем основное изображение
+    # 1) Загрузка исходного изображения
     try:
         base = Image.open(image_path).convert("RGBA")
     except Exception:
@@ -27,21 +28,35 @@ async def generate_image(
     draw = ImageDraw.Draw(base)
     margin = 20
 
-    # 2) Шрифт
-    font_path = "media/fonts/ALS_Story_2.0_R.otf"
+    # 2) Пути к шрифтам
+    fonts_dir       = "media/fonts"
+    bold_path       = os.path.join(fonts_dir, "ALS_Story_2.0_B.otf")
+    regular_path    = os.path.join(fonts_dir, "ALS_Story_2.0_R.otf")
+
+    # 3) Загрузка шрифтов с fallback
     try:
-        font = ImageFont.truetype(font_path, 36)
+        font_bold = ImageFont.truetype(bold_path, 48)
     except Exception:
-        logger.warning(f"Не удалось загрузить шрифт {font_path}, используем дефолт")
-        font = ImageFont.load_default()
+        logger.warning(f"Не удалось загрузить шрифт {bold_path}, используем дефолт")
+        font_bold = ImageFont.load_default()
 
-    # 3) Рисуем текст
-    draw.text((margin, margin), animal_name, font=font, fill="white")
-    line = f"{user_name}, это ты!"
-    text_height = font.getsize(line)[1]
-    draw.text((margin, base.height - margin - text_height), line, font=font, fill="white")
+    try:
+        font_regular = ImageFont.truetype(regular_path, 36)
+    except Exception:
+        logger.warning(f"Не удалось загрузить шрифт {regular_path}, используем дефолт")
+        font_regular = ImageFont.load_default()
 
-    # 4) Вставляем логотип
+    # 4) Рисуем заголовок (имя животного) в левом верхнем углу
+    draw.text((margin, margin), animal_name, font=font_bold, fill="white")
+
+    # 5) Рисуем подпись (имя пользователя) внизу слева
+    caption = f"{user_name}, это ты!"
+    text_width, text_height = draw.textsize(caption, font=font_regular)
+    x = margin
+    y = base.height - margin - text_height
+    draw.text((x, y), caption, font=font_regular, fill="white")
+
+    # 6) Вставляем логотип в правый нижний угол
     logo_path = "media/logo/MZoo-logo-circle-black.png"
     if os.path.exists(logo_path):
         try:
@@ -58,12 +73,16 @@ async def generate_image(
     else:
         logger.warning(f"Логотип не найден по пути {logo_path}")
 
-    # 5) Сохраняем итог
+    # 7) Сохранение итоговой картинки
     out_dir = "media/generated"
     os.makedirs(out_dir, exist_ok=True)
     filename = f"{user_name}_{animal_name}.png"
     output_path = os.path.join(out_dir, filename)
-    base.save(output_path)
-    logger.info(f"Сгенерирована картинка результата: {output_path}")
+    try:
+        base.save(output_path)
+        logger.info(f"Сгенерирована картинка результата: {output_path}")
+    except Exception:
+        logger.exception(f"Не удалось сохранить изображение {output_path}")
+        raise
 
     return output_path
