@@ -113,13 +113,13 @@
 
     ```bash
     pytest --maxfail=1 --disable-warnings -q
-        ```
+    ```
 
 3. **Ожидаемый вывод:**
 
     ```bash
     $ pytest --maxfail=1 --disable-warnings -q
-    .....                                                                                           [100%]
+    .....                                                                          [100%]
     5 passed in 2.20s
     ```
 
@@ -172,4 +172,4 @@
 
 GitHub: github.com/vbereznyak
 
-Telegram: @vbereznyak
+Telegram: @amasovich
